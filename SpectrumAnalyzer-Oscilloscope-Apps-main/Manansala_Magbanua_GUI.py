@@ -18,12 +18,11 @@ class SpectrumAnalyzerGUI(ctk.CTkFrame):
         self.poppins = ctk.CTkFont(
             family="Poppins",
         )
-        self.parent.title("Voice Recorder")
+        self.parent.title("Signal Processing Visualization")
         self.parent.geometry("1150x650")
         self.recorder = SpectrumAnalyzer()
         self.is_theme_open = False
         self.is_darked = False
-        self.track_button = 1
 
         self.parent.columnconfigure(0, weight=1)
         self.parent.rowconfigure(0, weight=1)
@@ -42,6 +41,9 @@ class SpectrumAnalyzerGUI(ctk.CTkFrame):
             fg_color="transparent",
         )
         self.hero_frame.place(x=360, y=70)
+        self.name = ctk.CTkLabel(self.frame, text="Signal Analysis and Visualization",text_color=["white", "black"],
+            font=(self.poppins, 21, "bold"), )
+        self.name.place(x=45, y=20, anchor="nw")
         self.theme_frame = ctk.CTkFrame(
             self.frame,
             corner_radius=8,
@@ -88,11 +90,6 @@ class SpectrumAnalyzerGUI(ctk.CTkFrame):
             dark_image=Image.open("icons/save_dark.png"),
             size=(20, 20),
         )
-        self.download_icon = ctk.CTkImage(
-            light_image=Image.open("icons/download.png"),
-            dark_image=Image.open("icons/download_dark.png"),
-            size=(20, 20),
-        )
         self.play_icon = ctk.CTkImage(
             light_image=Image.open("icons/play.png"),
             dark_image=Image.open("icons/play_dark.png"),
@@ -101,11 +98,6 @@ class SpectrumAnalyzerGUI(ctk.CTkFrame):
         self.plot_icon = ctk.CTkImage(
             light_image=Image.open("icons/plot.png"),
             dark_image=Image.open("icons/plot_dark.png"),
-            size=(20, 20),
-        )
-        self.upload_icon = ctk.CTkImage(
-            light_image=Image.open("icons/upload.png"),
-            dark_image=Image.open("icons/upload_dark.png"),
             size=(20, 20),
         )
         self.logo_image = ctk.CTkImage(
@@ -182,15 +174,15 @@ class SpectrumAnalyzerGUI(ctk.CTkFrame):
             height=20,
             width=20,
         )
-        self.record_btn1.place(x=45, y=115, anchor="w")
-        self.record_btn2.place(x=160, y=115, anchor="w")
-        self.badge1.place(x=114, y=124, anchor="w")
-        self.badge2.place(x=229, y=124, anchor="w")
+        self.record_btn1.place(x=45, y=125, anchor="w")
+        self.record_btn2.place(x=160, y=125, anchor="w")
+        self.badge1.place(x=114, y=134, anchor="w")
+        self.badge2.place(x=229, y=134, anchor="w")
 
         self.plot_button = ctk.CTkButton(
             self.frame,
             image=self.plot_icon,
-            text="Plot",
+            text="Plot Graph",
             compound="left",
             text_color=["white", "black"],
             text_color_disabled=["white", "black"],
@@ -203,7 +195,7 @@ class SpectrumAnalyzerGUI(ctk.CTkFrame):
         )
         self.save_graph = ctk.CTkButton(
             self.frame,
-            image=self.download_icon,
+            image=self.save_icon,
             text="Save Graph",
             compound="left",
             text_color=["white", "black"],
@@ -215,9 +207,8 @@ class SpectrumAnalyzerGUI(ctk.CTkFrame):
             state="disabled",
             command=self.saveGraph,
         )
-        self.plot_button.place(x=45, y=185, anchor="w")
-        # self.upload_button.place(x=45, y=255, anchor="w")
-        self.save_graph.place(x=45, y=255, anchor="w")
+        self.plot_button.place(x=45, y=195, anchor="w")
+        self.save_graph.place(x=45, y=265, anchor="w")
 
         self.current_frame = 0
         self.gif_running = False
@@ -528,7 +519,6 @@ class SpectrumAnalyzerGUI(ctk.CTkFrame):
         self.tabview.set("Spectrum Analyzer")
 
     def plotSpectrum(self):
-        # self.hero.destroy()
         for widget in self.spectrum_frame.winfo_children():
             widget.destroy()
 
@@ -545,7 +535,6 @@ class SpectrumAnalyzerGUI(ctk.CTkFrame):
             self.spectrum_frame.pack(fill=ctk.BOTH, expand=True)
 
     def plotOscilloscope(self):
-        # self.hero.destroy()
         for widget in self.oscilloscope_frame.winfo_children():
             widget.destroy()
 
@@ -589,6 +578,7 @@ class SpectrumAnalyzerGUI(ctk.CTkFrame):
             self.after(100, self.animateWave)
 
     def resetView(self):
+        self.hero_frame.forget()
         if self.tabview.winfo_exists():
             self.tabview.place_forget()
         self.gif_running = True
